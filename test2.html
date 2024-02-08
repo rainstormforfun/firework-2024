@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-9" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.0" />
+    <title></title>
+
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        background-color: black;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+
+      canvas {
+        display: block;
+      }
+
+      #ball {
+        width: 20px;
+        height: 20px;
+        /* border-radius: 50%;
+            background-color: red; */
+        position: absolute;
+      }
+
+      .fireworks-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- <audio id="fireworkSound" src="C:\Users\宋雨桐\Desktop\FireWorks-Single-A-www.fesliyanstudios.com.mp3" preload="auto"></audio> -->
+
+    <div id="text-container">
+      <p id="text"></p>
+    </div>
+    <script>
+      document.addEventListener("click", function (event) {
+        createBall(event.clientX, event.clientY);
+      });
+
+      const intervalTime = 1000 + 1000 * Math.random();
+      setInterval(function () {
+        createBall(
+          Math.random() * window.innerWidth,
+          Math.random() * window.innerHeight
+        );
+      }, intervalTime);
+      function createBall(x, y) {
+        // const fireworkSound = document.getElementById('fireworkSound');
+        const fireworkSound = new Audio("single-firework-79814.mp3");
+        const fireworksCanvas = document.createElement("canvas");
+        fireworksCanvas.className = "fireworks-canvas";
+        document.body.appendChild(fireworksCanvas);
+        fireworksCanvas.width = window.innerWidth;
+        fireworksCanvas.height = window.innerHeight;
+        const ctx = fireworksCanvas.getContext("2d");
+
+        //const ball = document.createElement('div');
+        const ball = new Image();
+        ball.src = "giphy.gif";
+        ball.id = "ball";
+        // ball.className = 'ball';
+        document.body.appendChild(ball);
+        ball.style.left = x + "px";
+        ball.style.top = window.innerHeight - 20 + "px";
+        const randomY =
+          window.innerHeight / 3 + Math.random() * (window.innerHeight / 2);
+
+        const speed = 200;
+        const startTime = performance.now();
+
+        function animate(currentTime) {
+          const elapsed = currentTime - startTime;
+          const distance = speed * (elapsed / 1000);
+          ball.style.transform = `translateY(-${distance}px)`;
+
+          if (distance < randomY) {
+            window.requestAnimationFrame(animate);
+          } else {
+            document.body.removeChild(ball);
+            fireworkSound.play();
+            startFireworks(x, randomY, 10, fireworksCanvas, ctx);
+          }
+        }
+
+        animate(startTime);
+      }
+
+      function setColors(firework) {
+        let hue = Math.random() * 360;
+        let hueVariance = 60;
+        firework.hue =
+          Math.floor(
+            Math.random() * (hue + hueVariance - (hue - hueVariance))
+          ) +
+          (hue - hueVariance);
+        firework.brightness = Math.floor(Math.random() * 21) + 50;
+        firework.alpha = (Math.floor(Math.random() * 60) + 40) / 100;
+      }
+
+      function startFireworks(x, randomY, radius, fireworksCanvas, ctx) {
+        let startT = performance.now();
+        let firework = {};
+        setColors(firework);
+        let speed = 1 - 5 / 120;
+        radiusRandom = Math.random();
+        locationRandom = -1 + Math.random() * 2;
+        locationRandom3 = -1 + Math.random() * 2;
+        locationRandom4 = -1 + Math.random() * 2;
+        locationRandom5 = -1 + Math.random() * 2;
+        const count = 18;
+        let fireRadius1 = [];
+        let fireRadius2 = [];
+        let fireRadius3 = [];
+        let fireRadius4 = [];
+        let fireRadius5 = [];
+
+        for (let i = 0; i < count; i++) {
+          fireRadius1[i] = -30 + Math.random() * 60;
+          fireRadius2[i] = -30 + Math.random() * 60;
+          fireRadius3[i] = -30 + Math.random() * 60;
+          fireRadius4[i] = -30 + Math.random() * 60;
+          fireRadius5[i] = -30 + Math.random() * 60;
+        }
+        function drawFires() {
+          const radiusMax = 30;
+
+          for (let i = 0; i < count; i++) {
+            // let firework = fireworks[i];
+
+            let angle = (360 / count) * i;
+            let radians = (angle * Math.PI) / 180;
+            let moveX = x + Math.cos(radians) * radius + fireRadius1[i];
+            let moveY =
+              window.innerHeight -
+              randomY +
+              Math.sin(radians) * radius +
+              (radius * radius) / 500 +
+              fireRadius1[i] / 10;
+
+            let moveX2 =
+              x +
+              Math.cos(radians + 0.05) * (radius - 3) +
+              locationRandom * 10 +
+              fireRadius2[i];
+            let moveY2 =
+              window.innerHeight -
+              randomY +
+              Math.sin(radians + 0.01) * (radius - 3) +
+              (radius * radius) / 450 +
+              fireRadius2[i] / 10;
+            let moveX3 =
+              x +
+              Math.cos(radians + 0.1) * (radius - 5) +
+              locationRandom3 * 10 +
+              fireRadius3[i];
+            let moveY3 =
+              window.innerHeight -
+              randomY +
+              Math.sin(radians + 0.1) * (radius - 5) +
+              (radius * radius) / 400 +
+              fireRadius3[i] / 10;
+            let moveX4 =
+              x +
+              Math.cos(radians + 0.15) * (radius - 7) +
+              locationRandom4 * 10 +
+              fireRadius4[i];
+            let moveY4 =
+              window.innerHeight -
+              randomY +
+              Math.sin(radians + 0.15) * (radius - 7) +
+              (radius * radius) / 350 +
+              fireRadius4[i] / 10;
+            let moveX5 =
+              x +
+              Math.cos(radians + 0.2) * (radius - 9) +
+              locationRandom3 * 10 +
+              fireRadius5[i];
+            let moveY5 =
+              window.innerHeight -
+              randomY +
+              Math.sin(radians + 0.2) * (radius - 9) +
+              (radius * radius) / 400 +
+              fireRadius5[i] / 10;
+            ctx.beginPath();
+            ctx.arc(moveX, moveY, 2, Math.PI * 2, false);
+            // ctx.arc(moveX2, moveY2, 2, Math.PI * 2, false);
+            ctx.closePath();
+
+            ctx.fillStyle = `hsla(${firework.hue}, 100%, ${firework.brightness}%, ${firework.alpha})`;
+            ctx.fill();
+
+            ctx.beginPath();
+            // ctx.arc(moveX, moveY, 2, Math.PI * 2, false);
+            ctx.arc(moveX2, moveY2, 2, Math.PI * 2, false);
+            ctx.closePath();
+
+            ctx.fillStyle = `hsla(${firework.hue}, 50%, ${firework.brightness}%, ${firework.alpha})`;
+            ctx.fill();
+
+            ctx.beginPath();
+            // ctx.arc(moveX, moveY, 2, Math.PI * 2, false);
+            ctx.arc(moveX3, moveY3, 2, Math.PI * 2, false);
+            ctx.closePath();
+
+            ctx.fillStyle = `hsla(${firework.hue}, 50%, ${firework.brightness}%, ${firework.alpha})`;
+            ctx.fill();
+            ctx.beginPath();
+            // ctx.arc(moveX, moveY, 2, Math.PI * 2, false);
+            ctx.arc(moveX4, moveY4, 2, Math.PI * 2, false);
+            ctx.closePath();
+
+            ctx.fillStyle = `hsla(${firework.hue}, 50%, (${firework.brightness}+15)%, ${firework.alpha})`;
+            ctx.fill();
+            ctx.beginPath();
+            // ctx.arc(moveX, moveY, 2, Math.PI * 2, false);
+            ctx.arc(moveX5, moveY5, 2, Math.PI * 2, false);
+            ctx.closePath();
+
+            ctx.fillStyle = `hsla(${firework.hue}, 50%, (${firework.brightness} + 30)%, ${firework.alpha})`;
+            ctx.fill();
+            if (firework.alpha <= 0.05) {
+              ctx.clearRect(
+                0,
+                0,
+                fireworksCanvas.width,
+                fireworksCanvas.height
+              );
+            }
+          }
+          radius += 1 + radiusRandom;
+          firework.alpha -= 0.007;
+        }
+
+        function tick() {
+          ctx.globalCompositeOperation = "destination-out";
+          ctx.fillStyle = "rgba(0,0,0," + 10 / 100 + ")";
+          ctx.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+          ctx.globalCompositeOperation = "lighter";
+          drawFires();
+          requestAnimationFrame(tick);
+        }
+
+        tick();
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const textContainer = document.getElementById("text-container");
+        const text = "不理我的大SB新年快乐";
+        let index = 0;
+
+        function showText() {
+          if (index < text.length) {
+            const newText = document.createTextNode(text[index]);
+            const p = document.createElement("p");
+            p.appendChild(newText);
+            textContainer.appendChild(p);
+            index++;
+            setTimeout(showText, 200); // 每个字出现的时间间隔
+          }
+        }
+
+        showText();
+      });
+    </script>
+  </body>
+</html>
